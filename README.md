@@ -1,7 +1,7 @@
 # R3LIVE
 ## A Robust, Real-time, RGB-colored, LiDAR-Inertial-Visual tightly-coupled state Estimation and mapping package
 
-**Our preprint paper**: Our preprint paper are available at [here](./papers/R3LIVE:%20A%20Robust,%20Real-time,%20RGB-colored,%20LiDAR-Inertial-Visual%20tightly-coupled%20state.pdf)
+**Our preprint paper**: Our preprint paper are available at [here](https://github.com/hku-mars/r3live/blob/master/papers/R3LIVE:%20A%20Robust%2C%20Real-time%2C%20RGB-colored%2C%20LiDAR-Inertial-Visual%20tightly-coupled%20stateEstimation%20and%20mapping%20package.pdf)
 
 **Date of release**: Our paper is currently under review, and our code will be released after the first round of review if the reviewer's comments are positive.
 
@@ -31,7 +31,7 @@
     <div align="center">
         <img src="pics/r3live_airsim.png" width = 80% >
     </div>
-    <font color=#a0a0a0 size=2>We use the maps reconstructed by R3LIVE to build the car (in (a)) and drone (in (b)) simulator with AirSim(https://microsoft.github.io/AirSim/). The images in green and blue frameboxes are of the depth, RGB image query from the AirSim's API, respectively.</font>
+    <font color=#a0a0a0 size=2>We use the maps reconstructed by R3LIVE to build the car (in (a)) and drone (in (b)) simulator with AirSim(https://microsoft.github.io/AirSim). The images in green and blue frameboxes are of the depth, RGB image query from the AirSim's API, respectively.</font>
     <div align="center">
         <img src="pics/r3live_ue.png" width = 80% >
     </div>
