@@ -3,7 +3,7 @@
 
 **Our preprint paper**: Our preprint paper are available at [here](https://github.com/hku-mars/r3live/blob/master/papers/R3LIVE:%20A%20Robust%2C%20Real-time%2C%20RGB-colored%2C%20LiDAR-Inertial-Visual%20tightly-coupled%20stateEstimation%20and%20mapping%20package.pdf)
 
-**Date of release**: Our paper is currently under review, and our code will be released after the first round of review if the reviewer's comments are positive.
+**[Updated] Data of release**: We have just received the reviewer comments in the first round of paper reviews and we decide to release our codes before **Dec 31, 2021**.
 
 **Our related video**: our related video is now available on YouTube (click below images to open, or watch it on Bilibili<sup>[1](https://www.bilibili.com/video/BV1d341117d6?share_source=copy_web), [2](https://www.bilibili.com/video/BV1e3411q7Di?share_source=copy_web)</sup>):
 <div align="center">
