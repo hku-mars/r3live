@@ -1,0 +1,54 @@
+---- How to write an IMPORT filter ----
+
+For writing an import filter for a XXX 3D mesh file type you must:
+
+create a class templated on the mesh type and named:
+
+vcg::tri::io::ImporterXXX<MeshType>
+
+The class must have at least the following methods
+
+static int Open(MESH_TYPE &mesh, const char *filename, CallBackPos *cb=0)
+static int Open(MESH_TYPE &mesh, const char *filename, int & loadmask, CallBackPos *cb =0)
+static const char *ErrorMsg(int error)
+
+where loadmask is an writeonly bitmask that, after the successful 
+loading, will contain what kind of data have been found inside the 
+loaded file (per vert color, tex coords etc).
+
+Please note that you can NOT use loadmask to selectively loading attribute from files.
+Note also that the returned mask should always match with the capability mask of your mesh,
+so if your mesh has no texture coords, that bit will be always zero even if the original file 
+has texture coords.
+
+To know the original content of a given file use the LoadMask function.
+
+The last function is used to translate the numerical error code in a more meaningful message.
+
+The callback function should be used to back communicate the loading status in a 1..100 range.
+It should be called approximatively no more than some hundreds of time, 
+so do not call it for every loaded face. Typical callback line 
+in a j-based loop during vertex loading:
+
+if(cb && (j%1000)==0) cb(j*50/vertex_number,"Vertex Loading");
+				
+
+---- How to write an EXPORT filter ----
+
+create a class templated on the mesh type and named:
+
+vcg::tri::io::ExporterDOH<MeshType>
+
+The class must have at least the following methods
+
+static int Save(MESH_TYPE &mesh, const char *filename, CallBackPos *cb=0)
+static int Save(MESH_TYPE &mesh, const char *filename, int & savemask, CallBackPos *cb =0)
+static const char *ErrorMsg(int error)
+static int GetExportMaskCapability()
+
+function return 0 in case of success and a code in any other case...
+
+
+
+
+

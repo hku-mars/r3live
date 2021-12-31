@@ -1,0 +1,16 @@
+<launch>
+    <!-- Subscribed topics -->
+    <param name="LiDAR_pointcloud_topic" type="string" value= "/laser_cloud_flat" />
+    <param name="IMU_topic" type="string" value= "/livox/imu" />
+    <param name="Image_topic" type="string" value= "/camera/image_color" />
+    <param name="r3live_common/map_output_dir" type="string" value="$(env HOME)/r3live_output" />
+    <rosparam command="load" file="$(find r3live)/../config/r3live_config.yaml" />
+
+    <node pkg="r3live" type="r3live_LiDAR_front_end" name="r3live_LiDAR_front_end"  output="screen" required="true"/>
+    <node pkg="r3live" type="r3live_mapping" name="r3live_mapping" output="screen" required="true" />
+    
+    <arg name="rviz" default="1" />
+    <group if="$(arg rviz)">
+        <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find r3live)/../config/rviz/r3live_rviz_config.rviz" />
+    </group>
+</launch>

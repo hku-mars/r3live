@@ -1,0 +1,47 @@
+<launch>
+    
+    <param name="add_keyframe_R" value="10.0" />   <!-- 10   -->
+    <param name="add_keyframe_t" value="0.15" />   <!-- 0.15 -->
+
+    <!-- The minimum distance (current point to existing points, unit in pixels) for inserting a new point to mesh (set 0 to disabled this constrain) -->
+    <param name="insert_pt_dis" value="0.0" />
+    
+    <!-- Exploits the free-space support in order to reconstruct weakly-represented surfaces, see paper to get more detail: 
+    Jancosek, Michal, and Tomas Pajdla. "Exploiting visibility information in surface reconstruction to preserve weakly supported surfaces." -->
+    <param name="if_use_free_space_support" value="false" />
+    
+    <!-- Multiplier adjusting the minimum thickness considered during visibility weighting -->
+    <param name="thickness_factor" value="1.0" />
+    
+    <!-- Multiplier adjusting the quality weight considered during graph-cut -->
+    <param name="quality_factor" value="0.0" />
+    
+    <!-- Decimation factor in range (0..1] to be applied to the reconstructed surface (set 1 to disabled) -->
+    <param name="decimate_mesh" value="1" />
+
+    <!-- spurious factor for removing faces with too long edges or isolated components (set 0 to disabled) -->
+    <param name="if_remove_spurious" value="40.0" />
+    
+    <!-- The flag tp control the removal of spike faces -->
+    <param name="if_remove_spikes" value="true" />
+    
+    <!-- Try to close small holes (with size smaller the given value) in the reconstructed surface (0 - disabled) -->
+    <param name="close_holes_dist" value="20" />
+
+    <!-- Factor for smoothing the reconstructed surface, the bigger the value, the smoother the mesh. -->
+    <param name="smooth_mesh_factor" value="5" />
+    
+    <!-- The working directory, where we input the offline maps files and output the reconstructed mesh  -->
+    <param name="working_dir" value="$(env HOME)/r3live_output" />
+    
+    <!-- The factor of smoothing the texture of mesh -->
+    <param name="texturing_smooth_factor" value="10" />
+    
+    <!-- The name of the offline map files (with suffix *.r3live) -->
+    <param name="offline_map_name" value="test.r3live" />
+
+    <!-- launch-prefix="gdb -ex run - -args" -->
+    <!-- <node pkg="r3live" type="r3live_meshing" name="r3live_meshing"  output="screen" launch-prefix="gdb -ex run - -args" /> -->
+    <node pkg="r3live" type="r3live_meshing" name="r3live_meshing"  output="screen"/>
+   
+</launch>

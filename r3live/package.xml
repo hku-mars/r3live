@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+  <name>r3live</name>
+  <version>1.0.0</version>
+  <description>R3LIVE: A Robust, Real-time, RGB-colored, LiDAR-Inertial-Visual tightly-coupled state Estimation and mapping package</description>
+  <maintainer email="ziv.lin.ljr@gmail.com">Jiarong.Lin</maintainer>
+  <license>GPLv2</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>livox_ros_driver</build_depend>
+
+  <run_depend>catkin</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>livox_ros_driver</run_depend>
+
+</package>
