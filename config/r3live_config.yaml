@@ -4,7 +4,6 @@ Lidar_front_end:
    using_raw_point: 1
    point_step: 1
    
-   
 r3live_common:
    if_dump_log: 0                   # If recording ESIKF update log. [default = 0]
    record_offline_map: 1            # If recording offline map. [default = 1]
@@ -14,7 +13,8 @@ r3live_common:
    estimate_i2c_extrinsic: 1        # If enable estimate the extrinsic between camera and IMU. [default = 1] 
    estimate_intrinsic: 1            # If enable estimate the online intrinsic calibration of the camera lens. [default = 1] 
    maximum_vio_tracked_pts: 600     # The maximum points for tracking. [default = 600]
-   append_global_map_point_step: 4
+   append_global_map_point_step: 4  # The point step of append point to global map. [default = 4]
+
 r3live_vio:
    camera_intrinsic:
       [863.4241, 0.0, 640.6808,

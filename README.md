@@ -5,35 +5,46 @@
 **[Dec 29, 2021] Release of datasets**: Our datasets for evaluation can now be accessed from [Google drive](https://drive.google.com/drive/folders/15i-TRa0EA8BCbNdARVqPMDsU9JOlagVF?usp=sharing) or [Baidu-NetDisk [百度网盘]](https://pan.baidu.com/s/1zmVxkcwOSul8oTBwaHfuFg) (code提取码: wwxw). We have released totally **9** rosbag files for evaluating r3live, with the introduction of these datasets can be found on this [page](https://github.com/ziv-lin/r3live_dataset).
 
 ## 1. Introduction
-&emsp;**R3LIVE** is a novel LiDAR-Inertial-Visual sensor fusion framework, which takes advantage of measurement of LiDAR, inertial, and visual sensors to achieve robust and accurate state estimation. R3LIVE is built upon our previous work [R2LIVE](https://github.com/hku-mars/r2live), is contained of two subsystems: the LiDAR-inertial odometry (LIO) and the visual-inertial odometry (VIO). The LIO subsystem ([FAST-LIO](https://github.com/hku-mars/FAST_LIO)) takes advantage of the measurement from LiDAR and inertial sensors and builds the geometric structure of (i.e. the position of 3D points) global maps. The VIO subsystem utilizes the data of visual-inertial sensors and renders the map's texture (i.e. the color of 3D points). <br>
+**R3LIVE** is a novel LiDAR-Inertial-Visual sensor fusion framework, which takes advantage of measurement of LiDAR, inertial, and visual sensors to achieve robust and accurate state estimation. R3LIVE is built upon our previous work [R2LIVE](https://github.com/hku-mars/r2live), is contained of two subsystems: the LiDAR-inertial odometry (LIO) and the visual-inertial odometry (VIO). The LIO subsystem ([FAST-LIO](https://github.com/hku-mars/FAST_LIO)) takes advantage of the measurement from LiDAR and inertial sensors and builds the geometric structure of (i.e. the position of 3D points) global maps. The VIO subsystem utilizes the data of visual-inertial sensors and renders the map's texture (i.e. the color of 3D points). <br>
 &emsp; Our preprint paper is available [here](https://github.com/hku-mars/r3live/blob/master/papers/R3LIVE:%20A%20Robust%2C%20Real-time%2C%20RGB-colored%2C%20LiDAR-Inertial-Visual%20tightly-coupled%20stateEstimation%20and%20mapping%20package.pdf), with our accompanying videos are now available on YouTube (click below images to open) and Bilibili<sup>[1](https://www.bilibili.com/video/BV1d341117d6?share_source=copy_web), [2](https://www.bilibili.com/video/BV1e3411q7Di?share_source=copy_web)</sup>.
 <div align="center">
-<a href="https://youtu.be/j5fT8NE5fdg" target="_blank"><img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/R3LIVE_paper.jpg" alt="video" width="45%" /></a>
-<a href="https://youtu.be/4rjrrLgL3nk" target="_blank"><img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/R3LIVE_demos.jpg" alt="video" width="45%" /></a>
+<a href="https://youtu.be/j5fT8NE5fdg" target="_blank"><img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/R3LIVE_paper.jpg" alt="video" width="49.5%" /></a>
+<a href="https://youtu.be/4rjrrLgL3nk" target="_blank"><img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/R3LIVE_demos.jpg" alt="video" width="49.5%" /></a>
 </div>
 
 ## 2. What can R3LIVE do?
 
 ### 2.1 Strong robustness in various challenging scenarios
-&emsp; R3LIVE is robust enough to work well in various of LiDAR-degenerated scenarios, or even in simultaneously LiDAR degenerated and visual texture-less environments (see Experiment-1 of our [paper](https://github.com/hku-mars/r3live/blob/master/papers/R3LIVE:%20A%20Robust%2C%20Real-time%2C%20RGB-colored%2C%20LiDAR-Inertial-Visual%20tightly-coupled%20stateEstimation%20and%20mapping%20package.pdf)).  
+R3LIVE is robust enough to work well in various of LiDAR-degenerated scenarios (see following figures): 
 <div align="center">
-<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/degenerate_02.gif" alt="video" width="45%" />
-<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/degenerate_00.gif"  width="45%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/degenerate_01_pic.png" width="100%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/degenerate_02_pic.png" width="100%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/degenerate_01.gif"  width="49.5%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/degenerate_02.gif"  width="49.5%" />
+</div>
+
+And even in simultaneously LiDAR degenerated and visual texture-less environments (see Experiment-1 of our [paper](https://github.com/hku-mars/r3live/blob/master/papers/R3LIVE:%20A%20Robust%2C%20Real-time%2C%20RGB-colored%2C%20LiDAR-Inertial-Visual%20tightly-coupled%20stateEstimation%20and%20mapping%20package.pdf)).  
+<div align="center">
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/exp_00.png" alt="video" width="49.5%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/degenerate_00.gif" alt="video" width="49.5%" />
 </div>
 
 ### 2.2 Real-time RGB maps reconstruction
-&emsp;R3LIVE is able to reconstruct the precise, dense, 3D, RGB-colored maps of surrounding environment in real-time (watch this [video](https://youtu.be/j5fT8NE5fdg)).
+R3LIVE is able to reconstruct the precise, dense, 3D, RGB-colored maps of surrounding environment in real-time (watch this [video](https://youtu.be/j5fT8NE5fdg)).
 <div align="center">
-<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/hku_demo.gif"  width="45%" />
-<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/hkust_demo.gif" alt="video" width="45%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/cover_half.jpg" width = 100% />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/hku_campus_seq_01.png" width = 100% />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/hku_park_01.png" width = 100% />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/hku_demo.gif"  width="49.5%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/hkust_demo.gif" alt="video" width="49.5%" />
 </div>
 
 ### 2.3 Ready for 3D applications
-&emsp; To make R3LIVE more extensible, we also provide a series of offline utilities for reconstructing and texturing meshes, which further reduce the gap between R3LIVE and various 3D applications (watch this [video](https://youtu.be/4rjrrLgL3nk)).
+To make R3LIVE more extensible, we also provide a series of offline utilities for reconstructing and texturing meshes, which further reduce the gap between R3LIVE and various 3D applications (watch this [video](https://youtu.be/4rjrrLgL3nk)).
 <div align="center">
-<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/mesh.png" alt="video" width="90%" />
-<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/ue_game_0.gif" alt="video" width="45%" />
-<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/ue_game_1.gif"  width="45%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/pics/mesh.png" alt="video" width="100%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/ue_game_0.gif" alt="video" width="49.5%" />
+<img src="https://github.com/ziv-lin/r3live_dataset/blob/main/gifs/ue_game_1.gif"  width="49.5%" />
 </div>
 
 ## 3. Prerequisites
@@ -85,7 +96,7 @@ If everything is correct, you will get the result that matches our [paper](https
 ### 5.3 Save the maps to your disk
 R3LIVE allow you to save the maps you build at anytime you wanted. You just need to click on the "Control panel" and press 'S' or 's' key.
 <div align="center">
-<img src="./control_panel.png" alt="video" width="90%" />
+<img src="./control_panel.png" alt="video" width="80%" />
 </div>
 
 ### 5.3 Reconstruct and texture your mesh
