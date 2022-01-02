@@ -1460,7 +1460,31 @@ inline String get_RAM_info()
 #endif // _MSC_VER
     return formatBytes( nTotalPhys ) + " Physical Memory " + formatBytes( nTotalVirtual ) + " Virtual Memory";
 }
-/*----------------------------------------------------------------*/
+
+inline double get_total_phy_RAM_size_in_MB()
+{
+    struct sysinfo info;
+    sysinfo( &info );
+    return ( ( double ) ( ( size_t ) info.totalram ) / 1024.0 / 1024.0 );
+}
+
+inline double get_total_RAM_size_in_MB()
+{
+    struct sysinfo info;
+    sysinfo( &info );
+    return ( ( double ) ( ( size_t ) info.totalram + info.totalswap  ) / 1024.0 / 1024.0 );
+}
+
+inline double get_total_phy_RAM_size_in_GB()
+{
+    return ( ( double ) get_total_phy_RAM_size_in_MB() / 1024.0 );
+}
+
+inline double get_total_RAM_size_in_GB()
+{
+    return ( ( double ) get_total_RAM_size_in_MB() / 1024.0 );
+}
+
 
 inline String get_OS_info()
 {

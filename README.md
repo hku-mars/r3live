@@ -2,6 +2,8 @@
 ## A Robust, Real-time, RGB-colored, LiDAR-Inertial-Visual tightly-coupled state Estimation and mapping package
 
 ## News
+**[Dec 31, 2021] Release of code**: Our codes are now available in this repo, please kindly follow our instructions to launch our package ^_^. If you have met any bug or problem, **please feel free to draw an issue and I will respond ASAP**.
+
 **[Dec 29, 2021] Release of datasets**: Our datasets for evaluation can now be accessed from [Google drive](https://drive.google.com/drive/folders/15i-TRa0EA8BCbNdARVqPMDsU9JOlagVF?usp=sharing) or [Baidu-NetDisk [百度网盘]](https://pan.baidu.com/s/1zmVxkcwOSul8oTBwaHfuFg) (code提取码: wwxw). We have released totally **9** rosbag files for evaluating r3live, with the introduction of these datasets can be found on this [page](https://github.com/ziv-lin/r3live_dataset).
 
 ## 1. Introduction
@@ -103,6 +105,26 @@ R3LIVE allow you to save the maps you build at anytime you wanted. You just need
 After you have save your offline map on your disk (default save in directory: ${HOME}/r3live_output), you can launch our utility to reconstruct and texture your mesh.
 ```
 roslaunch r3live r3live_reconstruct_mesh.launch
+```
+
+### 5.4 Visualized your saved maps.
+As default, your offline map (and reconstructed mesh) will be saved in the directory **${HOME}/r3live_output**, you can open it with pcl_viewer (and [meshlab](https://www.meshlab.net/)).
+
+Install pcl_viewer and meshlab:
+```
+sudo apt-get install pcl-tools meshlab
+```
+
+Visualizing your offline point cloud maps (with suffix *.pcd):
+```
+cd ${HOME}/r3live_output
+pcl_viewer rgb_pt.pcd
+```
+
+Visualizing your reconstructed mesh (with suffix *.ply):
+```
+cd ${HOME}/r3live_output
+meshlab textured_mesh.ply
 ```
 
 ## 6. Sample and run your own data

@@ -163,9 +163,23 @@ Global_map::Global_map( int if_start_service )
     m_mutex_recent_added_list = std::make_shared< std::mutex >();
     m_mutex_rgb_pts_in_recent_hitted_boxes = std::make_shared< std::mutex >();
     m_mutex_m_box_recent_hitted = std::make_shared< std::mutex >();
-    m_mutex_pts_last_visited  = std::make_shared< std::mutex >();
+    m_mutex_pts_last_visited = std::make_shared< std::mutex >();
     // Allocate memory for pointclouds
-    m_rgb_pts_vec.reserve( 1e9 );
+    if ( Common_tools::get_total_phy_RAM_size_in_GB() < 12 )
+    {
+        scope_color( ANSI_COLOR_RED_BOLD );
+        std::this_thread::sleep_for( std::chrono::seconds( 1 ) );
+        cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+        cout << "I have detected your physical memory smaller than 12GB (currently: " << Common_tools::get_total_phy_RAM_size_in_GB()
+             << "GB). I recommend you to add more physical memory for improving the overall performance of R3LIVE." << endl;
+        cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+        std::this_thread::sleep_for( std::chrono::seconds( 5 ) );
+        m_rgb_pts_vec.reserve( 1e8 );
+    }
+    else
+    {
+        m_rgb_pts_vec.reserve( 1e9 );
+    }
     // m_rgb_pts_in_recent_visited_voxels.reserve( 1e6 );
     if ( if_start_service )
     {
