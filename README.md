@@ -107,7 +107,7 @@ After you have save your offline map on your disk (default save in directory: ${
 roslaunch r3live r3live_reconstruct_mesh.launch
 ```
 
-### 5.4 Visualized your saved maps.
+### 5.4 Visualize your saved maps.
 As default, your offline map (and reconstructed mesh) will be saved in the directory **${HOME}/r3live_output**, you can open it with pcl_viewer (and [meshlab](https://www.meshlab.net/)).
 
 Install pcl_viewer and meshlab:
@@ -133,7 +133,7 @@ Since the LiDAR data and IMU data published by the official Livox-ros-driver is 
 ## Report our problems and bugs
 We know our packages might not totally stable in this stage, and we are keep working on improving the performance and reliability of our codes. So, if you have met any bug or problem, please feel free to draw an issue and I will respond ASAP.
 
-&emsp; For reporting your problems, please attach both your hardware and software environment if possible (see the following figure printed by R3LIVE), which will be a great help for me in locating your problems.
+&emsp; For reporting our problems and bugs, please attach both your hardware and software environment if possible (printed by R3LIVE, see the following figure), which will be a great help for me in locating your problems.
 
 <div align="center">
 <img src="./envs.png" alt="video" width="80%" />
