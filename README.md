@@ -130,6 +130,14 @@ meshlab textured_mesh.ply
 ## 6. Sample and run your own data
 Since the LiDAR data and IMU data published by the official Livox-ros-driver is with the timestamp of LiDAR (started from 0 in each recording), and the timestamp of the image is usually recorded with the timestamp of the operation system. To make them working under the same time-based, we modified the source code of Livox-ros-driver, which is available at [here](https://github.com/ziv-lin/livox_ros_driver_for_R2LIVE). We suggest you replace the official driver with it when sampling your own data for R3LIVE.
 
+## Report our problems and bugs
+We know our packages might not totally stable in this stage, and we are keep working on improving the performance and reliability of our codes. So, if you have met any bug or problem, please feel free to draw an issue and I will respond ASAP.
+
+&emsp; For reporting your problems, please attach both your hardware and software environment if possible (see the following figure printed by R3LIVE), which will be a great help for me in locating your problems.
+
+<div align="center">
+<img src="./envs.png" alt="video" width="80%" />
+</div>
 
 ## Acknowledgments
 In the development of R3LIVE, we stand on the shoulders of the following repositories:
