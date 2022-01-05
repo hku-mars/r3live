@@ -184,7 +184,7 @@ struct Camera_Lidar_queue
         if (m_if_have_lidar_data == 0)
         {
             m_if_have_lidar_data = 1;
-            cout << ANSI_COLOR_BLUE_BOLD << "Have LiDAR data" << endl;
+            // cout << ANSI_COLOR_BLUE_BOLD << "Have LiDAR data" << endl;
         }
         if (in_time < m_last_imu_time - m_sliding_window_tim)
         {

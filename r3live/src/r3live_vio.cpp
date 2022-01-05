@@ -120,8 +120,8 @@ void R3LIVE::print_dash_board()
         g_last_stamped_mem_mb = mem_used_mb ;
     }
     std::string out_str_line_1, out_str_line_2;
-    out_str_line_1 = std::string(        "| System-time | LiDAR-frame | Camera-frame | Memory used (Mb) |") ;
-    //                                    1             16            30             45
+    out_str_line_1 = std::string(        "| System-time | LiDAR-frame | Camera-frame |  Pts in maps | Memory used (Mb) |") ;
+    //                                    1             16            30             45             60     
     // clang-format on
     out_str_line_2.reserve( 1e3 );
     out_str_line_2.append( "|   " ).append( Common_tools::get_current_time_str() );
@@ -130,13 +130,17 @@ void R3LIVE::print_dash_board()
     append_space_to_bits( out_str_line_2, 28 );
     out_str_line_2.append( "|    " ).append( std::to_string( g_camera_frame_idx ) );
     append_space_to_bits( out_str_line_2, 43 );
+    out_str_line_2.append( "| " ).append( std::to_string( m_map_rgb_pts.m_rgb_pts_vec.size() ) );
+    append_space_to_bits( out_str_line_2, 58 );
     out_str_line_2.append( "|    " ).append( std::to_string( mem_used_mb ) );
 
+    out_str_line_2.insert( 58, ANSI_COLOR_YELLOW, 7 );
     out_str_line_2.insert( 43, ANSI_COLOR_BLUE, 7 );
     out_str_line_2.insert( 28, ANSI_COLOR_GREEN, 7 );
     out_str_line_2.insert( 14, ANSI_COLOR_RED, 7 );
     out_str_line_2.insert( 0, ANSI_COLOR_WHITE, 7 );
 
+    out_str_line_1.insert( 58, ANSI_COLOR_YELLOW_BOLD, 7 );
     out_str_line_1.insert( 43, ANSI_COLOR_BLUE_BOLD, 7 );
     out_str_line_1.insert( 28, ANSI_COLOR_GREEN_BOLD, 7 );
     out_str_line_1.insert( 14, ANSI_COLOR_RED_BOLD, 7 );
@@ -378,23 +382,23 @@ void   R3LIVE::process_image( cv::Mat &temp_img, double msg_time )
     if ( m_camera_start_ros_tim < 0 )
     {
         m_camera_start_ros_tim = msg_time;
-        m_vio_scale_factor = 1280 * m_image_downsample_ratio / temp_img.cols; // 320 * 24
+        m_vio_scale_factor = m_vio_image_width * m_image_downsample_ratio / temp_img.cols; // 320 * 24
         // load_vio_parameters();
         set_initial_camera_parameter( g_lio_state, m_camera_intrinsic.data(), m_camera_dist_coeffs.data(), m_camera_ext_R.data(),
                                       m_camera_ext_t.data(), m_vio_scale_factor );
         cv::eigen2cv( g_cam_K, intrinsic );
         cv::eigen2cv( g_cam_dist, dist_coeffs );
-        initUndistortRectifyMap( intrinsic, dist_coeffs, cv::Mat(), intrinsic, cv::Size( 1280 / m_vio_scale_factor, 1024 / m_vio_scale_factor ),
+        initUndistortRectifyMap( intrinsic, dist_coeffs, cv::Mat(), intrinsic, cv::Size( m_vio_image_width / m_vio_scale_factor, m_vio_image_heigh / m_vio_scale_factor ),
                                  CV_16SC2, m_ud_map1, m_ud_map2 );
         m_thread_pool_ptr->commit_task( &R3LIVE::service_pub_rgb_maps, this);
         m_thread_pool_ptr->commit_task( &R3LIVE::service_VIO_update, this);
-        m_mvs_recorder.init( g_cam_K, 1280 / m_vio_scale_factor, &m_map_rgb_pts );
+        m_mvs_recorder.init( g_cam_K, m_vio_image_width / m_vio_scale_factor, &m_map_rgb_pts );
         m_mvs_recorder.set_working_dir( m_map_output_dir );
     }
 
     if ( m_image_downsample_ratio != 1.0 )
     {
-        cv::resize( temp_img, img_get, cv::Size( 1280 / m_vio_scale_factor, 1024 / m_vio_scale_factor ) );
+        cv::resize( temp_img, img_get, cv::Size( m_vio_image_width / m_vio_scale_factor, m_vio_image_heigh / m_vio_scale_factor ) );
     }
     else
     {
@@ -427,10 +431,14 @@ void R3LIVE::load_vio_parameters()
 {
 
     std::vector< double > camera_intrinsic_data, camera_dist_coeffs_data, camera_ext_R_data, camera_ext_t_data;
+    m_ros_node_handle.getParam( "r3live_vio/image_width", m_vio_image_width );
+    m_ros_node_handle.getParam( "r3live_vio/image_height", m_vio_image_heigh );
     m_ros_node_handle.getParam( "r3live_vio/camera_intrinsic", camera_intrinsic_data );
     m_ros_node_handle.getParam( "r3live_vio/camera_dist_coeffs", camera_dist_coeffs_data );
     m_ros_node_handle.getParam( "r3live_vio/camera_ext_R", camera_ext_R_data );
     m_ros_node_handle.getParam( "r3live_vio/camera_ext_t", camera_ext_t_data );
+
+    CV_Assert( ( m_vio_image_width != 0 && m_vio_image_heigh != 0 ) );
 
     if ( ( camera_intrinsic_data.size() != 9 ) || ( camera_dist_coeffs_data.size() != 5 ) || ( camera_ext_R_data.size() != 9 ) ||
          ( camera_ext_t_data.size() != 3 ) )
@@ -1066,7 +1074,7 @@ char R3LIVE::cv_keyboard_callback()
 void R3LIVE::service_VIO_update()
 {
     // Init cv windows for debug
-    op_track.set_intrinsic( g_cam_K, g_cam_dist * 0, cv::Size( 1280 / m_vio_scale_factor, 1024 / m_vio_scale_factor ) );
+    op_track.set_intrinsic( g_cam_K, g_cam_dist * 0, cv::Size( m_vio_image_width / m_vio_scale_factor, m_vio_image_heigh / m_vio_scale_factor ) );
     op_track.m_maximum_vio_tracked_pts = m_maximum_vio_tracked_pts;
     m_map_rgb_pts.m_minimum_depth_for_projection = m_tracker_minimum_depth;
     m_map_rgb_pts.m_maximum_depth_for_projection = m_tracker_maximum_depth;

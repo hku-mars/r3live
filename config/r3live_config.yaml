@@ -16,6 +16,8 @@ r3live_common:
    append_global_map_point_step: 4  # The point step of append point to global map. [default = 4]
 
 r3live_vio:
+   image_width: 1280
+   image_height: 1024
    camera_intrinsic:
       [863.4241, 0.0, 640.6808,
       0.0,  863.4171, 518.3392,

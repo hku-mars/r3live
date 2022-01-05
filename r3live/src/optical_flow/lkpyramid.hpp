@@ -92,7 +92,6 @@ public:
                                double minEigThreshold_ = 1e-4
                                ) : m_lk_win_size(winSize_), m_maxLevel(maxLevel_), m_terminate_criteria(criteria_), flags(flags_), minEigThreshold(minEigThreshold_)
     {
-        printf_line;
         set_termination_criteria(m_terminate_criteria);
     }
 

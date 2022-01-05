@@ -249,6 +249,8 @@ public:
     int m_maximum_image_buffer = 2;
     int m_track_windows_size = 50;
     double m_minumum_rgb_pts_size = 0.05;
+    double m_vio_image_width = 0;
+    double m_vio_image_heigh = 0;
     int m_if_estimate_i2c_extrinsic = 1;
     int m_if_estimate_intrinsic = 1;
     double m_control_image_freq =  100; 
