@@ -2,9 +2,10 @@
 ## A Robust, Real-time, RGB-colored, LiDAR-Inertial-Visual tightly-coupled state Estimation and mapping package
 
 ## News
-**[Dec 31, 2021] Release of code**: Our codes are now available in this repo, please kindly follow our instructions to launch our package ^_^. If you have met any bug or problem, **please feel free to draw an issue and I will respond ASAP**.
 
-**[Dec 29, 2021] Release of datasets**: Our datasets for evaluation can now be accessed from [Google drive](https://drive.google.com/drive/folders/15i-TRa0EA8BCbNdARVqPMDsU9JOlagVF?usp=sharing) or [Baidu-NetDisk [百度网盘]](https://pan.baidu.com/s/1zmVxkcwOSul8oTBwaHfuFg) (code提取码: wwxw). We have released totally **9** rosbag files for evaluating r3live, with the introduction of these datasets can be found on this [page](https://github.com/ziv-lin/r3live_dataset).
+**[Jan 14, 2022] Release of CAD files**: The CAD files of our handheld device using for sampling the data will be released in [rxlive_handheld](https://github.com/ziv-lin/rxlive_handheld) this month, which is modified based on our previous work in [Livox_handheld](https://github.com/ziv-lin/My_solidworks/tree/master/livox_handhold).
+
+**[Jan 14, 2022] Add support of spinning LiDAR**: Give an example of launching R3LIVE with a spinning LIDAR (see section 7).
 
 ## 1. Introduction
 **R3LIVE** is a novel LiDAR-Inertial-Visual sensor fusion framework, which takes advantage of measurement of LiDAR, inertial, and visual sensors to achieve robust and accurate state estimation. R3LIVE is built upon our previous work [R2LIVE](https://github.com/hku-mars/r2live), is contained of two subsystems: the LiDAR-inertial odometry (LIO) and the visual-inertial odometry (VIO). The LIO subsystem ([FAST-LIO](https://github.com/hku-mars/FAST_LIO)) takes advantage of the measurement from LiDAR and inertial sensors and builds the geometric structure of (i.e. the position of 3D points) global maps. The VIO subsystem utilizes the data of visual-inertial sensors and renders the map's texture (i.e. the color of 3D points). <br>
@@ -73,6 +74,8 @@ pkg-config --modversion opencv
 ```
 We have successfully test our algorithm with version **3.3.1**, **3.4.16**, **4.2.1** and **4.5.3**.
 
+**Notice:** We have noticed that a large number of users meet a crash of problem after launching our package due to the mismatch of openCV version (see  [issue #11](https://github.com/hku-mars/r3live/issues/11), [issue #20](https://github.com/hku-mars/r3live/issues/20) and [issue #23](https://github.com/hku-mars/r3live/issues/23), and etc.). If you meet with similar problems, please make sure that the OpenCV you complied are same as the OpenCV you run with.  This is **very very** important to launch R3LIVE correctly.
+
 ## 4. Build R3LIVE on ROS:
 Clone this repository and catkin_make:
 ```
@@ -128,9 +131,27 @@ meshlab textured_mesh.ply
 ```
 
 ## 6. Sample and run your own data
+### 6.1  Livox-ros-driver for R2/R3LIVE
 Since the LiDAR data and IMU data published by the official Livox-ros-driver is with the timestamp of LiDAR (started from 0 in each recording), and the timestamp of the image is usually recorded with the timestamp of the operation system. To make them working under the same time-based, we modified the source code of Livox-ros-driver, which is available at [here](https://github.com/ziv-lin/livox_ros_driver_for_R2LIVE). We suggest you replace the official driver with it when sampling your own data for R3LIVE.
+### 6.2  Sensor calibration
+In order to launch R3LIVE on your own hardware setup, you need to have a carefully calibration of the extrinsic among LiDAR, Camera and IMU. We recommend you using the following repo to kindly calibrate your sensors:
 
-## Report our problems and bugs
+[**livox_camera_calib**](https://github.com/hku-mars/livox_camera_calib): A robust, high accuracy extrinsic calibration tool between high resolution LiDAR (e.g. Livox) and camera in targetless environment. 
+
+## 7. Support of the spinning LiDAR
+Even though our proposed method is unrelated to what kind of LiDAR you used, it is impossible for us making R3LIVE compatible with all kinds of existing LiDARs. To launch R3LIVE with spinning LIDAR, it requires you to take some effort in modifying the source code of our LiDAR front-end (see [LiDAR_front_end.cpp](https://github.com/hku-mars/r3live/blob/master/r3live/src/loam/LiDAR_front_end.cpp)). Here we give an example to test our LIO-subsystem with an [Ouster-2 64 Line Spinning LIDAR](https://ouster.com/zh-cn/products/scanning-lidar/os2-sensor/).
+
+###  7.1 Example-1: Ouster OS2-64
+Download our recorded rosbag file from [here](https://drive.google.com/file/d/1mZoDWDOZOcZ0H6MBMEpGMRc1nueeqToc/view?usp=sharing).
+```
+roslaunch r3live r3live_bag_ouster.launch 
+rosbag play ouster_example_for_LIO_test.bag 
+```
+Notice: We manually disable our VIO-subsystem due the missed of calibration files in this example.
+
+Finally, we are still working on making R3LIVE compatible with more spinning LiDARs. More and more examples will be released in the future.
+
+## 8. Report our problems and bugs
 We know our packages might not totally stable in this stage, and we are keep working on improving the performance and reliability of our codes. So, if you have met any bug or problem, please feel free to draw an issue and I will respond ASAP.
 
 &emsp; For reporting our problems and bugs, please attach both your hardware and software environment if possible (printed by R3LIVE, see the following figure), which will be a great help for me in locating your problems.
@@ -139,15 +160,16 @@ We know our packages might not totally stable in this stage, and we are keep wor
 <img src="./envs.png" alt="video" width="80%" />
 </div>
 
-## Acknowledgments
+## 9. Acknowledgments
 In the development of R3LIVE, we stand on the shoulders of the following repositories:
 1. [R2LIVE](https://github.com/hku-mars/r2live): A robust, real-time tightly-coupled multi-sensor fusion package.
 2. [FAST-LIO](https://github.com/hku-mars/FAST_LIO): A computationally efficient and robust LiDAR-inertial odometry package.
 3. [ikd-Tree](https://github.com/hku-mars/ikd-Tree): A state-of-art dynamic KD-Tree for 3D kNN search. 
-4. [LOAM-Livox](https://github.com/hku-mars/loam_livox): A robust LiDAR Odometry and Mapping (LOAM) package for Livox-LiDAR.
-5. [openMVS](https://github.com/cdcseacave/openMVS): A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community.
-6. [VCGlib](https://github.com/cnr-isti-vclab/vcglib): An open source, portable, header-only Visualization and Computer Graphics Library.
-7. [CGAL](): A C++ Computational Geometry Algorithms Library.
+4. [livox_camera_calib](https://github.com/hku-mars/livox_camera_calib): A robust, high accuracy extrinsic calibration tool between high resolution LiDAR (e.g. Livox) and camera in targetless environment.
+5. [LOAM-Livox](https://github.com/hku-mars/loam_livox): A robust LiDAR Odometry and Mapping (LOAM) package for Livox-LiDAR.
+6. [openMVS](https://github.com/cdcseacave/openMVS): A library for computer-vision scientists and especially targeted to the Multi-View Stereo reconstruction community.  
+8. [VCGlib](https://github.com/cnr-isti-vclab/vcglib): An open source, portable, header-only Visualization and Computer Graphics Library.
+9. [CGAL](): A C++ Computational Geometry Algorithms Library.
 
 ## License
 The source code is released under [GPLv2](http://www.gnu.org/licenses/) license.
