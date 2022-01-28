@@ -3,7 +3,7 @@
 
 ## News
 
-**[Jan 14, 2022] Release of CAD files**: The CAD files of our handheld device using for sampling the data will be released in [rxlive_handheld](https://github.com/ziv-lin/rxlive_handheld) this month, which is modified based on our previous work in [Livox_handheld](https://github.com/ziv-lin/My_solidworks/tree/master/livox_handhold).
+**[Jan 28, 2022] Release of our hardware design**: The CAD files of our hardware design are now available in [rxlive_handheld](https://github.com/ziv-lin/rxlive_handheld). You can download, print, edit and  assemble our handheld device by following the guides.
 
 **[Jan 14, 2022] Add support of spinning LiDAR**: Give an example of launching R3LIVE with a spinning LIDAR (see section 7).
 
@@ -151,7 +151,14 @@ Notice: We manually disable our VIO-subsystem due the missed of calibration file
 
 Finally, we are still working on making R3LIVE compatible with more spinning LiDARs. More and more examples will be released in the future.
 
-## 8. Report our problems and bugs
+## 8. Access our open source hardware design
+In order to facilitate our users in reproducing our work, we also make our hardware design public available, where you can download all of our CAD source files in [rxlive_handheld](https://github.com/ziv-lin/rxlive_handheld).
+
+<div align="center">
+<img src="https://github.com/ziv-lin/rxlive_handheld/blob/master/pics/introduction_alpha.png" width="98%" />
+</div>
+
+## 9. Report our problems and bugs
 We know our packages might not totally stable in this stage, and we are keep working on improving the performance and reliability of our codes. So, if you have met any bug or problem, please feel free to draw an issue and I will respond ASAP.
 
 &emsp; For reporting our problems and bugs, please attach both your hardware and software environment if possible (printed by R3LIVE, see the following figure), which will be a great help for me in locating your problems.
@@ -160,7 +167,7 @@ We know our packages might not totally stable in this stage, and we are keep wor
 <img src="./envs.png" alt="video" width="80%" />
 </div>
 
-## 9. Acknowledgments
+## 10. Acknowledgments
 In the development of R3LIVE, we stand on the shoulders of the following repositories:
 1. [R2LIVE](https://github.com/hku-mars/r2live): A robust, real-time tightly-coupled multi-sensor fusion package.
 2. [FAST-LIO](https://github.com/hku-mars/FAST_LIO): A computationally efficient and robust LiDAR-inertial odometry package.
