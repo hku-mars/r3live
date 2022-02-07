@@ -964,7 +964,7 @@ int R3LIVE::service_LIO_update()
                 pubLaserCloudFullRes.publish( laserCloudFullRes3 );
             }
 
-            if ( 1 ) // append point cloud to global map.
+            if ( g_camera_lidar_queue.m_if_have_camera_data || (g_LiDAR_frame_index < 100) ) // append point cloud to global map.
             {
                 static std::vector< double > stastic_cost_time;
                 Common_tools::Timer          tim;
