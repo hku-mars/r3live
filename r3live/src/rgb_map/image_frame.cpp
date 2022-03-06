@@ -199,22 +199,35 @@ inline T getSubPixel(cv::Mat & mat, const double & row, const  double & col, dou
                (frac_row * frac_col * (T)mat.ptr<T>(ceil_row)[ceil_col]);
 }
 
-vec_3 Image_frame::get_rgb(double &u, double v, int layer, vec_3 *rgb_dx , vec_3 *rgb_dy )
+vec_3 Image_frame::get_rgb( double &u, double v, int layer, vec_3 *rgb_dx, vec_3 *rgb_dy )
 {
+    const int ssd = 5;
     cv::Vec3b rgb = getSubPixel< cv::Vec3b >( m_img, v, u, layer );
     if ( rgb_dx != nullptr )
     {
-        cv::Vec3b rgb_left = getSubPixel< cv::Vec3b >( m_img, v, u - 1, layer );
-        cv::Vec3b rgb_right = getSubPixel< cv::Vec3b >( m_img, v, u + 1, layer );
-        cv::Vec3b cv_rgb_dx = rgb_right - rgb_left;
-        *rgb_dx = vec_3( cv_rgb_dx( 0 ), cv_rgb_dx( 1 ), cv_rgb_dx( 2 ) );
+        cv::Vec3f rgb_left( 0, 0, 0 ), rgb_right( 0, 0, 0 );
+        float     pixel_dif = 0;
+        for ( int bias_idx = 1; bias_idx < ssd; bias_idx++ )
+        {
+            rgb_left += getSubPixel< cv::Vec3b >( m_img, v, u - bias_idx, layer );
+            rgb_right += getSubPixel< cv::Vec3b >( m_img, v, u + bias_idx, layer );
+            pixel_dif += 2 * bias_idx;
+        }
+        cv::Vec3f cv_rgb_dx = rgb_right - rgb_left;
+        *rgb_dx = vec_3( cv_rgb_dx( 0 ), cv_rgb_dx( 1 ), cv_rgb_dx( 2 ) ) / pixel_dif;
     }
     if ( rgb_dy != nullptr )
     {
-        cv::Vec3b rgb_down = getSubPixel< cv::Vec3b >( m_img, v - 1, u, layer );
-        cv::Vec3b rgb_up = getSubPixel< cv::Vec3b >( m_img, v + 1, u, layer );
-        cv::Vec3b cv_rgb_dy = rgb_up - rgb_down;
-        *rgb_dy = vec_3( cv_rgb_dy( 0 ), cv_rgb_dy( 1 ), cv_rgb_dy( 2 ) );
+        cv::Vec3f rgb_down( 0, 0, 0 ), rgb_up( 0, 0, 0 );
+        float     pixel_dif = 0;
+        for ( int bias_idx = 1; bias_idx < ssd; bias_idx++ )
+        {
+            rgb_down += getSubPixel< cv::Vec3b >( m_img, v - bias_idx, u, layer );
+            rgb_up += getSubPixel< cv::Vec3b >( m_img, v + bias_idx, u, layer );
+            pixel_dif += 2 * bias_idx;
+        }
+        cv::Vec3f cv_rgb_dy = rgb_up - rgb_down;
+        *rgb_dy = vec_3( cv_rgb_dy( 0 ), cv_rgb_dy( 1 ), cv_rgb_dy( 2 ) ) / pixel_dif;
     }
     return vec_3( rgb( 0 ), rgb( 1 ), rgb( 2 ) );
 }

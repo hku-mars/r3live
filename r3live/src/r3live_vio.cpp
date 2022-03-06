@@ -55,7 +55,7 @@ std::shared_ptr< Common_tools::ThreadPool > m_thread_pool_ptr;
 double                                      g_vio_frame_cost_time = 0;
 double                                      g_lio_frame_cost_time = 0;
 int                                         g_flag_if_first_rec_img = 1;
-
+#define DEBUG_PHOTOMETRIC 0
 #define USING_CERES 0
 void dump_lio_state_to_log( FILE *fp )
 {
@@ -107,6 +107,9 @@ std::string append_space_to_bits( std::string & in_str, int bits )
 }
 void R3LIVE::print_dash_board()
 {
+#if DEBUG_PHOTOMETRIC
+    return;
+#endif
     int mem_used_mb = ( int ) ( Common_tools::get_RSS_Mb() );
     // clang-format off
     if( (mem_used_mb - g_last_stamped_mem_mb < 1024 ) && g_last_stamped_mem_mb != 0 )
@@ -813,6 +816,9 @@ bool R3LIVE::vio_photometric( StatesGroup &state_in, Rgbmap_tracker &op_track, s
     int    if_esikf = 1;
 
     double acc_photometric_error = 0;
+#if DEBUG_PHOTOMETRIC
+    printf("==== [Image frame %d] ====\r\n", g_camera_frame_idx);
+#endif
     for ( int iter_count = 0; iter_count < 2; iter_count++ )
     {
         mat_3_3 R_imu = state_iter.rot_end;
@@ -861,7 +867,7 @@ bool R3LIVE::vio_photometric( StatesGroup &state_in, Rgbmap_tracker &op_track, s
             mat_3_3 pt_rgb_cov = ( ( RGB_pts * ) it->first )->get_rgb_cov();
             for ( int i = 0; i < 3; i++ )
             {
-                pt_rgb_info( i, i ) = 1.0 / pt_rgb_cov( i, i ) / 255;
+                pt_rgb_info( i, i ) = 1.0 / pt_rgb_cov( i, i ) ;
                 R_mat_inv( pt_idx * err_size + i, pt_idx * err_size + i ) = pt_rgb_info( i, i );
                 // R_mat_inv( pt_idx * err_size + i, pt_idx * err_size + i ) =  1.0;
             }
@@ -875,6 +881,10 @@ bool R3LIVE::vio_photometric( StatesGroup &state_in, Rgbmap_tracker &op_track, s
             acc_photometric_error += photometric_err;
 
             last_reprojection_error_vec[ pt_idx ] = photometric_err;
+
+            mat_photometric.setZero();
+            mat_photometric.col( 0 ) = obs_rgb_dx;
+            mat_photometric.col( 1 ) = obs_rgb_dy;
 
             avail_pt_count++;
             mat_pre << fx / pt_3d_cam( 2 ), 0, -fx * pt_3d_cam( 0 ) / pt_3d_cam( 2 ), 0, fy / pt_3d_cam( 2 ), -fy * pt_3d_cam( 1 ) / pt_3d_cam( 2 );
@@ -915,17 +925,21 @@ bool R3LIVE::vio_photometric( StatesGroup &state_in, Rgbmap_tracker &op_track, s
             H_T_H_spa = Hsub_T_temp_mat * R_mat_inv_spa * H_mat_spa;
             Eigen::SparseMatrix< double > temp_inv_mat =
                 ( H_T_H_spa.toDense() + ( state_in.cov * m_cam_measurement_weight ).inverse() ).inverse().sparseView();
+            // ( H_T_H_spa.toDense() + ( state_in.cov ).inverse() ).inverse().sparseView();
             Eigen::SparseMatrix< double > Ht_R_inv = ( Hsub_T_temp_mat * R_mat_inv_spa );
-            KH_spa = Ht_R_inv * H_mat_spa;
-            solution =
-                ( temp_inv_mat * ( Ht_R_inv * ( ( -1 * meas_vec.sparseView() ) ) ) - ( I_STATE_spa - temp_inv_mat * KH_spa ) * vec_spa ).toDense();
+            KH_spa = temp_inv_mat * Ht_R_inv * H_mat_spa;
+            solution = ( temp_inv_mat * ( Ht_R_inv * ( ( -1 * meas_vec.sparseView() ) ) ) - ( I_STATE_spa - KH_spa ) * vec_spa ).toDense();
         }
         state_iter = state_iter + solution;
-        // state_iter.cov = ((I_STATE_spa - KH_spa) * state_iter.cov.sparseView()).toDense();
+#if DEBUG_PHOTOMETRIC
+        cout << "Average photometric error: " <<  acc_photometric_error / total_pt_size << endl;
+        cout << "Solved solution: "<< solution.transpose() << endl;
+#else
         if ( ( acc_photometric_error / total_pt_size ) < 10 ) // By experience.
         {
             break;
         }
+#endif
         if ( fabs( acc_photometric_error - last_repro_err ) < 0.01 )
         {
             break;
